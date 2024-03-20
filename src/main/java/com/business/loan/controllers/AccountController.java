@@ -21,11 +21,6 @@ public class AccountController {
         this.service = service;
     }
 
-    @PostMapping("/account")
-    Account createAccount(@RequestBody Account account) {
-        return this.service.create(account);
-    }
-
     @GetMapping("/account/{id}")
     Optional<Account> getAccountById(@PathVariable("id") Long id) {
         return this.service.findById(id);
@@ -36,9 +31,13 @@ public class AccountController {
         return this.service.findAll();
     }
 
+    @PostMapping("/account")
+    Account createAccount(@RequestBody Account account) {
+        return this.service.create(account);
+    }
     @PostMapping("/account/{id}")
-    Account updateAccount(@PathVariable("id") Long id, @RequestBody AccountProfile updatedProfile) {
-        return this.updateAccount(id, updatedProfile);
+    Account updateAccountProfile(@PathVariable("id") Long id, @RequestBody AccountProfile updatedProfile) {
+        return this.service.update(id, updatedProfile);
     }
 
     @DeleteMapping("/account/{id}")

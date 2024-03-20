@@ -1,21 +1,40 @@
 package com.business.loan.controllers;
 
+import com.business.loan.models.Account;
 import com.business.loan.models.Guarantor;
-import com.business.loan.repositories.GuarantorRepository;
+import com.business.loan.services.GuarantorService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.Optional;
+
 @Controller
 @ResponseBody
 public class GuarantorController {
-    private final GuarantorRepository repository;
-    GuarantorController(GuarantorRepository repository) {
-        this.repository = repository;
+    private final GuarantorService service;
+    GuarantorController(GuarantorService service) {
+        this.service = service;
     }
-    @GetMapping("/guarantors")
-    Collection<Guarantor> guarantors () {
-        return this.repository.findAll();
+
+    @GetMapping("/guarantor")
+    Collection<Guarantor> getGuarantors() {
+        return this.service.findAll();
     }
+
+    @GetMapping("/guarantor/{id}")
+    Optional<Guarantor> guarantors (@PathVariable("id") Long id) {
+        return this.service.findById(id);
+    }
+
+    @GetMapping("/guarantor/loan/{id}")
+    Collection<Guarantor> findGuarantorByLoanId(@PathVariable("id") Long id) {
+        return this.service.findGuarantorsByLoanId(id);
+    }
+
+    @PostMapping("/guarantor")
+    Guarantor createGuarantor(@RequestBody Guarantor guarantor) {
+        return this.service.create(guarantor);
+    }
+
 }

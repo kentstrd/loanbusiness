@@ -1,5 +1,8 @@
 package com.business.loan.models;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -22,10 +25,25 @@ public class Loan {
     @Column(name = "endDate")
     private Date endDate;
     private String status;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+    @ManyToMany(mappedBy = "loans", fetch = FetchType.LAZY)
+    @JsonIdentityInfo(
+            generator = ObjectIdGenerators.PropertyGenerator.class,
+            property = "id",
+            scope = Loan.class)
+    protected Collection<Guarantor> guarantors;
 
+    public Collection<Guarantor> getGuarantors() {
+        return guarantors;
+    }
+    public Long getId() {
+        return id;
+    }
+    public Long getAccountId() {
+        return accountId;
+    }
     public Account getAccount() {
         return account;
     }
@@ -43,6 +61,33 @@ public class Loan {
     }
     public String getStatus() {
         return status;
+    }
+
+    public void setGuarantors(Collection<Guarantor> guarantors) {
+        this.guarantors = guarantors;
+    }
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public void setLoanAmount(Float loanAmount) {
+        this.loanAmount = loanAmount;
+    }
+
+    public void setInterestRate(Float interestRate) {
+        this.interestRate = interestRate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 
